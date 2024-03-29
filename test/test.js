@@ -1,7 +1,7 @@
 // test.js
 
 // Import the processLearnerData function from index.js
-const { processLearnerData } = require("./index.js");
+const { processLearnerData } = require("../index.js").default;
 
 // Import example data
 const {

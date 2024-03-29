@@ -1,7 +1,3 @@
-# SBA308
-
-skills based assessment javascript
-
 # Course Data Analyzer
 
 This project analyzes course data and learner submissions to calculate weighted average scores, taking into account late penalties and potential data inconsistencies.
@@ -13,18 +9,7 @@ This project analyzes course data and learner submissions to calculate weighted 
 - Validates data to ensure assignment groups belong to the correct course.
 - Handles potential errors (e.g., division by zero, invalid data types).
 
-**Usage**
-
-1. Install dependencies (if any): `npm install`
-2. Prepare input data in the specified JSON formats.
-3. Run the script: `node src/index.js <course_data> <assignment_groups> <learner_submissions>`
-
-**Input Data Formats**
-
-- See provided examples or project documentation.
-
 **Output**
-
 An array of learner result objects, each containing:
 
 - `id`: Learner ID
@@ -37,3 +22,15 @@ An array of learner result objects, each containing:
 - `src/calculations.js`: Calculation logic
 - `src/resultsFormatting.js`: Result object formatting
 - `src/index.js`: Main entry point
+- '
+
+## Introduction
+
+The Learner Data Processor is a tool intended to assist educators in analyzing learner performance within educational courses. It processes data related to learner submissions, calculates scores, and provides insights into learner progress and performance.
+
+## Features
+
+- Validates input
+- Calculates scores and penalties
+- Calculates average score
+- Formats processed data

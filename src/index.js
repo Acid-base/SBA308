@@ -1,12 +1,9 @@
 // index.js
 
 // Import required modules
-const { validateData } = require("./dataValidation.js");
-const {
-  calculateLatePenalty,
-  calculateAverageScore,
-} = require("./calculations.js");
-const { formatResults } = require("./resultsFormatting.js");
+import { validateData } from "dataValidation.js";
+import { calculateLatePenalty, calculateAverageScore } from "./calculations.js";
+import { formatResults } from "./resultsFormatting.js";
 
 // Main function to process learner data
 function processLearnerData(course, assignmentGroup, submissions) {
@@ -66,6 +63,6 @@ function processLearnerData(course, assignmentGroup, submissions) {
 // const result = processLearnerData(course, assignmentGroup, submissions);
 // console.log(result);
 
-module.exports = {
+export default {
   processLearnerData,
 };
