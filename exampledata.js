@@ -3,7 +3,7 @@
 // Example course information
 const CourseInfo = {
   id: 451,
-  name: "Introduction to JavaScript"
+  name: "Introduction to JavaScript",
 };
 
 // Example assignment group
@@ -17,10 +17,10 @@ const AssignmentGroup = {
       id: 1,
       name: "Declare a Variable",
       due_at: "2023-01-25",
-      points_possible: 50
+      points_possible: 50,
     },
     // Add more assignments as needed
-  ]
+  ],
 };
 
 // Example learner submissions
@@ -30,8 +30,8 @@ const LearnerSubmissions = [
     assignment_id: 1,
     submission: {
       submitted_at: "2023-01-25",
-      score: 47
-    }
+      score: 47,
+    },
   },
   // Add more submissions as needed
 ];
@@ -39,5 +39,5 @@ const LearnerSubmissions = [
 module.exports = {
   CourseInfo,
   AssignmentGroup,
-  LearnerSubmissions
+  LearnerSubmissions,
 };

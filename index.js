@@ -1,12 +1,12 @@
 // index.js
 
 // Import required modules
-const { validateData } = require("./dataValidation");
+const { validateData } = require("./dataValidation.js");
 const {
   calculateLatePenalty,
   calculateAverageScore,
-} = require("./calculations");
-const { formatResults } = require("./resultsFormatting");
+} = require("./calculations.js");
+const { formatResults } = require("./resultsFormatting.js");
 
 // Main function to process learner data
 function processLearnerData(course, assignmentGroup, submissions) {

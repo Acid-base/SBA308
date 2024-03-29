@@ -37,4 +37,3 @@ An array of learner result objects, each containing:
 - `src/calculations.js`: Calculation logic
 - `src/resultsFormatting.js`: Result object formatting
 - `src/index.js`: Main entry point
-
