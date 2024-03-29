@@ -1,101 +1,99 @@
-// The provided course information.
-const CourseInfo = {
-  id: 451,
-  name: "Introduction to JavaScript",
-};
-
-// The provided assignment group.
-const AssignmentGroup = {
-  id: 12345,
-  name: "Fundamentals of JavaScript",
-  course_id: 451,
-  group_weight: 25,
-  assignments: [
-    {
-      id: 1,
-      name: "Declare a Variable",
-      due_at: "2023-01-25",
-      points_possible: 50,
-    },
-    {
-      id: 2,
-      name: "Write a Function",
-      due_at: "2023-02-27",
-      points_possible: 150,
-    },
-    {
-      id: 3,
-      name: "Code the World",
-      due_at: "3156-11-15",
-      points_possible: 500,
-    },
-  ],
-};
-
-// The provided learner submission data.
-const LearnerSubmissions = [
-  {
-    learner_id: 125,
-    assignment_id: 1,
-    submission: {
-      submitted_at: "2023-01-25",
-      score: 47,
-    },
-  },
-  {
-    learner_id: 125,
-    assignment_id: 2,
-    submission: {
-      submitted_at: "2023-02-12",
-      score: 150,
-    },
-  },
-  {
-    learner_id: 125,
-    assignment_id: 3,
-    submission: {
-      submitted_at: "2023-01-25",
-      score: 400,
-    },
-  },
-  {
-    learner_id: 132,
-    assignment_id: 1,
-    submission: {
-      submitted_at: "2023-01-24",
-      score: 39,
-    },
-  },
-  {
-    learner_id: 132,
-    assignment_id: 2,
-    submission: {
-      submitted_at: "2023-03-07",
-      score: 140,
-    },
-  },
-];
-
 function getLearnerData(course, ag, submissions) {
-  // here, we would process this data to achieve the desired result.
-  const result = [
-    {
-      id: 125,
-      avg: 0.985, // (47 + 150) / (50 + 150)
-      1: 0.94, // 47 / 50
-      2: 1.0, // 150 / 150
-    },
-    {
-      id: 132,
-      avg: 0.82, // (39 + 125) / (50 + 150)
-      1: 0.78, // 39 / 50
-      2: 0.833, // late: (140 - 15) / 150
-    },
-  ];
+  try {
+    // Validate input data types and format
+    if (
+      typeof course !== "object" ||
+      typeof ag !== "object" ||
+      !Array.isArray(ag.assignments) ||
+      !Array.isArray(submissions)
+    ) {
+      throw new Error("Invalid input data format.");
+    }
 
-  return result;
+    // Check if AssignmentGroup belongs to the specified course
+    if (ag.course_id !== course.id) {
+      throw new Error(
+        "AssignmentGroup does not belong to the specified course."
+      );
+    }
+
+    // Verify all assignments are due before proceeding
+    ag.assignments.forEach((assignment) => {
+      const dueDate = new Date(assignment.due_at);
+      const now = new Date();
+      if (dueDate > now) {
+        throw new Error(`Assignment "${assignment.name}" is not yet due.`);
+      }
+    });
+
+    // Initialize the array to store the calculated learner data
+    const result = [];
+
+    // Iterate through learner submissions to process scores
+    submissions.forEach((submission) => {
+      // Find if we already have data for this learner
+      const learnerIndex = result.findIndex(
+        (item) => item.id === submission.learner_id
+      );
+
+      // Create data for the learner if not found, otherwise retrieve existing data
+      const learnerData = result[learnerIndex] || {
+        id: submission.learner_id,
+        totalScore: 0,
+        totalPossible: 0,
+      };
+
+      // Find the assignment details corresponding to this submission
+      const assignment = ag.assignments.find(
+        (a) => a.id === submission.assignment_id
+      );
+      if (!assignment) {
+        throw new Error(
+          `Submission for non-existent assignment ID: ${submission.assignment_id}`
+        );
+      }
+
+      // Calculate potential late submission penalty
+      const dueDate = new Date(assignment.due_at);
+      const submittedDate = new Date(submission.submission.submitted_at);
+      const latePenalty = submittedDate > dueDate ? 0.9 : 1;
+
+      // Update learner's scores
+      learnerData.totalScore += submission.submission.score * latePenalty;
+      learnerData.totalPossible += assignment.points_possible;
+
+      // Add or update the learner's data in the result array
+      if (!result[learnerIndex]) {
+        result.push(learnerData);
+      }
+    });
+
+    // Calculate final metrics for each learner
+    result.forEach((learnerData) => {
+      learnerData.avg = learnerData.totalScore / learnerData.totalPossible;
+
+      // Calculate individual assignment scores
+      ag.assignments.forEach((assignment) => {
+        const submission = submissions.find(
+          (s) =>
+            s.learner_id === learnerData.id && s.assignment_id === assignment.id
+        );
+
+        if (submission) {
+          learnerData[assignment.id] =
+            submission.submission.score / assignment.points_possible;
+        }
+      });
+
+      // Remove temporary properties
+      delete learnerData.totalScore;
+      delete learnerData.totalPossible;
+    });
+
+    return result;
+  } catch (error) {
+    // Handle and log the error for debugging and potential user feedback
+    console.error("Error processing learner data:", error);
+    throw error; // Re-throw the error for the caller to handle
+  }
 }
-
-const result = getLearnerData(CourseInfo, AssignmentGroup, LearnerSubmissions);
-
-console.log(result);
